@@ -55,6 +55,31 @@ SELECT date, SUM(best) FROM (
 ) WHERE rn = 1 GROUP BY date ORDER BY date;
 ```
 
+## JSON export: `krillion_answers.json`
+
+All 791 prompts as one JSON array (42 MB), oldest first:
+
+```json
+{
+  "id": "animal-whose-starts-k",
+  "text": "Name an animal whose name starts with K",
+  "category": "Animals",
+  "difficulty": 5,
+  "date": "2026-07-16",
+  "answers": [ { "answer": "Kouprey", "tier": "krillion" }, ... ]
+}
+```
+
+- `category` is generated from keywords in the prompt (`categorize.py`), because the site doesn't
+  have categories. Some prompts end up in the wrong category.
+- `difficulty` is 1-5, set by how many answers a prompt accepts (fewest = 5). Each level holds about
+  a fifth of the prompts.
+- `tier` uses the codes in the tier table above.
+
+```bash
+python3 export_json.py krillion_answers.sqlite krillion_answers.json
+```
+
 ## Rebuilding / updating
 
 ```bash
